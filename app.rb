@@ -1,4 +1,6 @@
 require 'bundler'
+require './lib/evernote_client.rb'
+require 'pry'
 require 'sinatra'
 enable :sessions
 
@@ -17,7 +19,7 @@ helpers do
   end
 
   def client
-    @client ||= EvernoteOAuth::Client.new(token: auth_token, consumer_key: OAUTH_CONSUMER_KEY, consumer_secret:OAUTH_CONSUMER_SECRET, sandbox: SANDBOX)
+    @client ||= EvernoteClient.instance.client(auth_token)
   end
 
   def user_store
@@ -47,6 +49,7 @@ end
 
 
 get '/' do
+  binding.pry
   erb :index
 end
 
@@ -58,6 +61,7 @@ end
 
 get '/list' do
   begin
+     binding.pry
     # Get notebooks
     session[:notebooks] = notebooks.map(&:name)
     # Get username
@@ -98,7 +102,6 @@ get '/callback' do
   end
   session[:oauth_verifier] = params['oauth_verifier']
   begin
-    binding.pry
     session[:access_token] = session[:request_token].get_access_token(:oauth_verifier => session[:oauth_verifier])
     redirect '/list'
   rescue => e
