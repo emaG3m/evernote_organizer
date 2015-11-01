@@ -1,7 +1,6 @@
 class CreateNote < ActiveRecord::Migration
   def up
-    create_table :notes do |t|
-      t.string   :guid
+    create_table :notes, id: :uuid do |t|
       t.string   :title
       t.string   :content
       t.integer  :content_length
