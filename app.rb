@@ -1,7 +1,10 @@
 require 'bundler'
-require './lib/evernote_client.rb'
-require 'pry'
 require 'sinatra'
+require 'sinatra/activerecord'
+require './config/environments'
+require './lib/evernote_client.rb'
+require './models/note.rb'
+require 'pry'
 enable :sessions
 
 $LOAD_PATH.push(File.expand_path(File.dirname(__FILE__)))

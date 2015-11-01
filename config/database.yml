@@ -1,6 +1,7 @@
 development:
   adapter: postgresql
   database: development
-  username: <%= ENV['PG_USER'] %>
-  password: <%= ENV['PG_PASS'] %>
+  pool: 5
+  username: ecwilliams
+  password:
   host: localhost
