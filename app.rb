@@ -25,37 +25,14 @@ helpers do
     @client ||= EvernoteClient.instance.client(auth_token)
   end
 
-  def user_store
-    @user_store ||= client.user_store
-  end
-
-  def note_store
-    @note_store ||= client.note_store
-  end
-
   def en_user
     user_store.getUser(auth_token)
   end
-
-  def notebooks
-    @notebooks = note_store.listNotebooks(auth_token)
-  end
-
-  def total_note_count
-    filter = Evernote::EDAM::NoteStore::NoteFilter.new
-    counts = note_store.findNoteCounts(auth_token, filter, false)
-    notebooks.inject(0) do |total_count, notebook|
-      total_count + (counts.notebookCounts[notebook.guid] || 0)
-    end
-  end
 end
-
 
 get '/' do
-  binding.pry
   erb :index
 end
-
 
 get '/reset' do
   session.clear
@@ -64,13 +41,12 @@ end
 
 get '/list' do
   begin
-     binding.pry
     # Get notebooks
-    session[:notebooks] = notebooks.map(&:name)
+    session[:notebooks] = client.notebooks.map(&:name)
     # Get username
     session[:username] = en_user.username
     # Get total note count
-    session[:total_notes] = total_note_count
+    session[:total_notes] = client.total_note_count
     erb :index
   rescue => e
     @last_error = "Error listing notebooks: #{e.message}"
