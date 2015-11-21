@@ -1,11 +1,10 @@
-require 'singleton'
-require 'pry'
-
 class EvernoteClient
-  include Singleton
 
-  def client(auth_token = nil)
-    @client ||= EvernoteOAuth::Client.new(
+  attr_reader :client, :auth_token
+
+  def initialize(auth_token)
+    @auth_token = auth_token
+    @client = EvernoteOAuth::Client.new(
       token: auth_token,
       consumer_key: OAUTH_CONSUMER_KEY,
       consumer_secret:OAUTH_CONSUMER_SECRET,
@@ -17,8 +16,8 @@ class EvernoteClient
     @user_store ||= client.user_store
   end
 
-  def user_store
-    @user_store ||= client.user_store
+  def user
+    @user ||= user_store.getUser(auth_token)
   end
 
   def note_store

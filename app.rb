@@ -1,10 +1,11 @@
 require 'bundler'
 require 'sinatra'
 require 'sinatra/activerecord'
+require 'pry'
 require './config/environments'
 require './lib/evernote_client.rb'
 require './models/note.rb'
-require 'pry'
+
 enable :sessions
 
 $LOAD_PATH.push(File.expand_path(File.dirname(__FILE__)))
@@ -21,12 +22,8 @@ helpers do
     session[:access_token].token if session[:access_token]
   end
 
-  def client
-    @client ||= EvernoteClient.instance.client(auth_token)
-  end
-
-  def en_user
-    user_store.getUser(auth_token)
+  def evernote_client
+    @client ||= EvernoteClient.new(auth_token)
   end
 end
 
@@ -41,12 +38,11 @@ end
 
 get '/list' do
   begin
-    # Get notebooks
-    session[:notebooks] = client.notebooks.map(&:name)
+    session[:notebooks] = evernote_client.notebooks.map(&:name)
     # Get username
-    session[:username] = en_user.username
+    session[:username] = evernote_client.user.username
     # Get total note count
-    session[:total_notes] = client.total_note_count
+    session[:total_notes] = evernote_client.total_note_count
     erb :index
   rescue => e
     @last_error = "Error listing notebooks: #{e.message}"
@@ -57,7 +53,7 @@ end
 get '/requesttoken' do
   callback_url = request.url.chomp('requesttoken').concat('callback')
   begin
-    session[:request_token] = client.request_token(:oauth_callback => callback_url)
+    session[:request_token] = evernote_client.client.request_token(:oauth_callback => callback_url)
     redirect '/authorize'
   rescue => e
     @last_error = "error obtaining temporary credentials: #{e.message}"
