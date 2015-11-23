@@ -11,12 +11,6 @@ enable :sessions
 $LOAD_PATH.push(File.expand_path(File.dirname(__FILE__)))
 require './evernote_config.rb'
 
-before do
-  if OAUTH_CONSUMER_KEY.empty? || OAUTH_CONSUMER_SECRET.empty?
-    halt '<span style="color:red">Before using this sample code you must edit evernote_config.rb /</a>.</span>'
-  end
-end
-
 helpers do
   def auth_token
     session[:access_token].token if session[:access_token]
