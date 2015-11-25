@@ -5,6 +5,8 @@ require 'pry'
 require './config/environments'
 require './lib/evernote_client.rb'
 require './models/note.rb'
+require './models/tag.rb'
+require './models/user.rb'
 
 enable :sessions
 
@@ -25,6 +27,17 @@ get '/' do
   erb :index
 end
 
+get '/login' do
+  erb :login
+end
+
+get '/register' do
+  erb :register
+end
+
+post '/register' do
+end
+
 get '/reset' do
   session.clear
   redirect '/'
@@ -32,11 +45,10 @@ end
 
 get '/list' do
   begin
-    session[:notebooks] = evernote_client.notebooks.map(&:name)
-    # Get username
-    session[:username] = evernote_client.user.username
-    # Get total note count
+    session[:notebooks]   = evernote_client.notebooks.map(&:name)
+    session[:username]    = evernote_client.user.username
     session[:total_notes] = evernote_client.total_note_count
+
     erb :index
   rescue => e
     @last_error = "Error listing notebooks: #{e.message}"

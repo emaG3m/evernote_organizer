@@ -2,6 +2,7 @@
   <head>
     <title>Evernote Chart Craziness</title>
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'/>
+    <link rel='stylesheet' href='index.css'/>
     <script type='text/javascript' src='https://code.jquery.com/jquery-2.1.1.js'></script>
     <script type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
   </head>
@@ -13,18 +14,20 @@
           <li><a href="#">Some Link</a></li>
           <li><a href="#">I'm a link 2</a></li>
         </ul>
-        <% if true %>
+        <% if false %>
           <li><p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Username1234</a></p></li>
         <% else %>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#about">Sign In</a></li>
-            <li><a href="#contact">Register</a></li>
+            <li><a href="/register">Register</a></li>
           </ul>
         <% end %>
       </div>
     </nav>
 
-    <%= yield %>
+    <div class="container">
+      <%= yield %>
+    </div>
 
   </body>
 </html>

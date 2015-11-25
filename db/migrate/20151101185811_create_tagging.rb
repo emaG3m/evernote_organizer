@@ -1,8 +1,10 @@
 class CreateTagging < ActiveRecord::Migration
   def up
     create_table :taggings, id: :uuid do |t|
-      t.string :note_id
-      t.string :tag_id
+      t.uuid :note_id
+      t.uuid :tag_id
     end
+
+    add_index :taggings, [:note_id, :tag_id], unique: :true
   end
 end

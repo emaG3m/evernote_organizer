@@ -1,0 +1,9 @@
+body {
+  padding-top: 120px;
+}
+
+.register {
+  border: 2px;
+  border-style: solid;
+  padding: 30px 15px 30px 15px;
+}

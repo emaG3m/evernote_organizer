@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151101185811) do
+ActiveRecord::Schema.define(version: 20151124032656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,13 +27,27 @@ ActiveRecord::Schema.define(version: 20151101185811) do
   end
 
   create_table "taggings", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string "note_id"
-    t.string "tag_id"
+    t.uuid "note_id"
+    t.uuid "tag_id"
   end
+
+  add_index "taggings", ["note_id", "tag_id"], name: "index_taggings_on_note_id_and_tag_id", unique: true, using: :btree
 
   create_table "tags", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string  "name"
+    t.uuid    "user_id"
     t.integer "update_sequence_num"
   end
+
+  add_index "tags", ["name", "user_id"], name: "index_tags_on_name_and_user_id", unique: true, using: :btree
+
+  create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string "username"
+    t.string "password"
+    t.string "evernote_username"
+    t.string "access_token"
+  end
+
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end
