@@ -32,10 +32,17 @@ get '/login' do
 end
 
 get '/register' do
+  @username = params[:username] if params[:username]
   erb :register
 end
 
 post '/register' do
+  if User.where(username: params[:username]).limit(1).count > 0
+    redirect "/register?username=#{params[:username]}"
+  else
+    User.create!(username: params[:username], password: params[:password])
+    redirect '/'
+  end
 end
 
 get '/reset' do

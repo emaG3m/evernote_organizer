@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
-  validates :name, presence: :true
+  validates :username, presence: :true
   validates :password, presence: :true
-  validates_uniqueness_of :name
+  validates_uniqueness_of :username
 
   has_many :notes
   has_many :tags

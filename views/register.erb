@@ -14,8 +14,20 @@
         <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon2">
       </div>
 
-      <button type="register" class="btn btn-default">Register</button>
+      <button type="register" id="register-btn" class="btn btn-default">Register</button>
+      <% if @username %>
+        <p class=error> <%= "Username " + @username + " is already in use"%>
+      <% end %>
     </form>
     <div class="col-md-3 col-lg-3"></div>
   </div>
 </div>
+
+<script>
+  $('#register-btn').on('click', function(e){
+    if ($('input[name=password]').val() != $('input[name=confirm_password]').val()){
+      e.preventDefault();
+      $('form').append("<p class=error, style=color:red;> Passwords do not match </p>")
+    }
+  });
+</script>
