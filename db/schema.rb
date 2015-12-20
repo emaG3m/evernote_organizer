@@ -42,12 +42,11 @@ ActiveRecord::Schema.define(version: 20151124032656) do
   add_index "tags", ["name", "user_id"], name: "index_tags_on_name_and_user_id", unique: true, using: :btree
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string "username"
-    t.string "password"
+    t.string "email"
+    t.string "password_hash"
     t.string "evernote_username"
-    t.string "access_token"
   end
 
-  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end

@@ -23,33 +23,62 @@ helpers do
   end
 end
 
+# GET REQUESTS
 get '/' do
   erb :index
 end
 
 get '/login' do
+  error = params[:error] if params[:error]
+  case error
+  when /unmatching/
+    @error = 'Email and password did not match'
+  when /existence/
+    error = error.split('-')
+    @error = "Account with email, #{error[1]}, does not exist"
+  when /unauthorized/
+    @error = 'You attempted an action that requires authorization. Please log in first.'
+  end
   erb :login
 end
 
-get '/register' do
-  @username = params[:username] if params[:username]
-  erb :register
-end
-
-post '/register' do
-  if User.where(username: params[:username]).limit(1).count > 0
-    redirect "/register?username=#{params[:username]}"
-  else
-    User.create!(username: params[:username], password: params[:password])
-    redirect '/'
-  end
-end
-
-get '/reset' do
-  session.clear
+get '/logout' do
+  session[:user_id] = nil
   redirect '/'
 end
 
+get '/register' do
+  @email_taken = params[:email_taken] if params[:email_taken]
+  erb :register
+end
+
+
+# POST REQUESTS
+post '/login' do
+  begin
+    user = User.authenticate(params[:email], params[:password])
+    if user
+      session[:user_id] = user.id
+      redirect '/'
+    else
+      redirect '/login?error=unmatching'
+    end
+  rescue ActiveRecord::RecordNotFound
+    redirect "/login?error=existence-#{params[:email]}"
+  end
+end
+
+post '/register' do
+  if !User.find_by_email(params[:email])
+    User.create!(email: params[:email], password: params[:password])
+    redirect '/'
+  else
+    redirect "/register?username_taken=#{params[:email]}"
+  end
+end
+
+
+#SAMPLE ENDPOINTS FROM EVERNOTE AUTHORIZATION TUTORIAL. NEEDS REFACTORING
 get '/list' do
   begin
     session[:notebooks]   = evernote_client.notebooks.map(&:name)

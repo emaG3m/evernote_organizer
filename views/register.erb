@@ -3,7 +3,7 @@
     <div class="col-md-3 col-lg-3"></div>
     <form class="col-md-6 col-lg-6 register", method="post", action="/register">
       <div class="form-group">
-        <input type="text" name="username" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+        <input type="text" name="email" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
       </div>
 
       <div class="form-group">
@@ -15,9 +15,9 @@
       </div>
 
       <button type="register" id="register-btn" class="btn btn-default">Register</button>
-      <% if @username %>
-        <p class=error> <%= "Username " + @username + " is already in use"%>
-      <% end %>
+      <% if @email_taken %>
+        <p class=error> <%= "Email " + @email_taken + " is already in use"%>
+      <%@email_taken end %>
     </form>
     <div class="col-md-3 col-lg-3"></div>
   </div>
