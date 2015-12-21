@@ -7,21 +7,21 @@
     <script type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
   </head>
   <body>
-
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <ul class="nav navbar-nav">
           <li><a href="#">Some Link</a></li>
           <li><a href="#">I'm a link 2</a></li>
         </ul>
-        <% if false %>
-          <li><p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Username1234</a></p></li>
-        <% else %>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#about">Sign In</a></li>
+          <% if session['user_id'] %>
+            <li><p class='navbar-text navbar-right'> Signed in as <%= User.find_by_id(session['user_id']).email  %> </a></li>
+            <li><a href="/logout">Log Out</a></li>
+          <% else %>
+            <li><a href="/login">Log In</a></li>
             <li><a href="/register">Register</a></li>
+          <% end %>
           </ul>
-        <% end %>
       </div>
     </nav>
 
