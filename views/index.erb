@@ -1,4 +1,4 @@
-<a href="/requesttoken">Click here</a> to authenticate this application using OAuth.
+<a href='/requesttoken' role="button" class="btn btn-primary btn-lg outline">Sync Account with Evernote</a>
 <% if session[:notebooks] %>
 <hr />
 <h3>The current user is <%= session[:username] %> and there are <%= session[:total_notes] %> notes in their account</h3>
