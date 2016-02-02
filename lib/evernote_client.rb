@@ -28,11 +28,13 @@ class EvernoteClient
     @notebooks = note_store.listNotebooks(auth_token)
   end
 
-  def total_note_count
+  def note_guids
     filter = Evernote::EDAM::NoteStore::NoteFilter.new
-    counts = note_store.findNoteCounts(auth_token, filter, false)
-    notebooks.inject(0) do |total_count, notebook|
-      total_count + (counts.notebookCounts[notebook.guid] || 0)
-    end
+    spec = Evernote::EDAM::NoteStore::NotesMetadataResultSpec.new()
+    @note_guids ||= note_store.findNotesMetadata(auth_token, filter, 0, 5000, spec).notes.map(&:guid)
+  end
+
+  def fetch_note(note_guid)
+    note_store.getNote(auth_token, note_guid, true, false, false, false)
   end
 end

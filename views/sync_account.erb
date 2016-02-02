@@ -1,0 +1,7 @@
+<form action="/sync_account" method="post">
+  <p>Choose which notebooks you'd like to import</p>
+  <% @notebooks.each do |name, id| %>
+    <input class="notebook" type="checkbox" name=<%= name.to_s.downcase.gsub(" ", "-") %> value=<%= id %> > <%= name %><br>
+  <% end %>
+  <input type="submit" value="Import">
+</form>

@@ -4,7 +4,9 @@ require 'sinatra/activerecord'
 require 'pry'
 require './config/environments'
 require './lib/evernote_client.rb'
+require './lib/evernote_account_syncer.rb'
 require './models/note.rb'
+require './models/notebook.rb'
 require './models/tag.rb'
 require './models/user.rb'
 
@@ -52,6 +54,13 @@ get '/register' do
   erb :register
 end
 
+get '/sync_account' do
+  @notebooks = Hash.new
+  evernote_client.notebooks.each do |notebook|
+    @notebooks[notebook.name.to_sym] = notebook.guid
+  end
+  erb :sync_account
+end
 
 # POST REQUESTS
 post '/login' do
@@ -77,8 +86,12 @@ post '/register' do
   end
 end
 
+post '/sync_account' do
+  notebook_ids = params.values
+  EvernoteAccountSyncer.new(evernote_client, notebook_ids).sync_account
+  redirect '/'
+end
 
-#SAMPLE ENDPOINTS FROM EVERNOTE AUTHORIZATION TUTORIAL. NEEDS REFACTORING
 get '/list' do
   begin
     session[:notebooks]   = evernote_client.notebooks.map(&:name)
@@ -91,6 +104,10 @@ get '/list' do
     erb :error
   end
 end
+
+
+
+# EVERNOTE AUTHENTICATION
 
 get '/requesttoken' do
   callback_url = request.url.chomp('requesttoken').concat('callback')
@@ -120,7 +137,7 @@ get '/callback' do
   session[:oauth_verifier] = params['oauth_verifier']
   begin
     session[:access_token] = session[:request_token].get_access_token(:oauth_verifier => session[:oauth_verifier])
-    redirect '/list'
+    redirect '/sync_account'
   rescue => e
     @last_error = 'Error extracting access token'
     erb :error

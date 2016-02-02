@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   validates :password, presence: :true
   validates_uniqueness_of :email
 
-  has_many :notes
+  has_many :notebooks
   has_many :tags
 
   def self.authenticate(email, password)
