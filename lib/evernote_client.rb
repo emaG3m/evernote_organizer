@@ -10,31 +10,33 @@ class EvernoteClient
       consumer_secret:OAUTH_CONSUMER_SECRET,
       sandbox: SANDBOX
     )
-  end
-
-  def user_store
-    @user_store ||= client.user_store
+    @user_store = client.user_store
+    @note_store = client.note_store
   end
 
   def user
-    @user ||= user_store.getUser(auth_token)
-  end
-
-  def note_store
-    @note_store ||= client.note_store
+    user_store.getUser(auth_token)
   end
 
   def notebooks
-    @notebooks = note_store.listNotebooks(auth_token)
+    note_store.listNotebooks(auth_token)
+  end
+
+  def tags
+    note_store.listTags(auth_token)
   end
 
   def note_guids
     filter = Evernote::EDAM::NoteStore::NoteFilter.new
     spec = Evernote::EDAM::NoteStore::NotesMetadataResultSpec.new()
-    @note_guids ||= note_store.findNotesMetadata(auth_token, filter, 0, 5000, spec).notes.map(&:guid)
+    note_store.findNotesMetadata(auth_token, filter, 0, 5000, spec).notes.map(&:guid)
   end
 
   def fetch_note(note_guid)
     note_store.getNote(auth_token, note_guid, true, false, false, false)
   end
+
+  private
+
+  attr_reader :user_store, :note_store
 end

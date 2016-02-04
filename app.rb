@@ -8,6 +8,7 @@ require './lib/evernote_account_syncer.rb'
 require './models/note.rb'
 require './models/notebook.rb'
 require './models/tag.rb'
+require './models/tagging.rb'
 require './models/user.rb'
 
 enable :sessions
@@ -88,7 +89,7 @@ end
 
 post '/sync_account' do
   notebook_ids = params.values
-  EvernoteAccountSyncer.new(evernote_client, notebook_ids).sync_account
+  EvernoteAccountSyncer.new(evernote_client, session[:user_id],  notebook_ids).sync_account
   redirect '/'
 end
 
