@@ -1,10 +1,12 @@
 require 'bundler'
 require 'sinatra'
 require 'sinatra/activerecord'
+require 'sidekiq'
 require 'pry'
 require './config/environments'
 require './lib/evernote_client.rb'
 require './lib/evernote_account_syncer.rb'
+require './lib/workers/sync_notes_worker.rb'
 require './models/note.rb'
 require './models/notebook.rb'
 require './models/tag.rb'
@@ -89,7 +91,7 @@ end
 
 post '/sync_account' do
   notebook_ids = params.values
-  EvernoteAccountSyncer.new(evernote_client, session[:user_id],  notebook_ids).sync_account
+  EvernoteAccountSyncer.new(auth_token, evernote_client, session[:user_id],  notebook_ids).sync_account
   redirect '/'
 end
 

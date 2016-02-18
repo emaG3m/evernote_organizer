@@ -1,8 +1,9 @@
 class EvernoteAccountSyncer
 
-  attr_reader :evernote_client, :user_id, :notebook_ids
+  attr_reader :evernote_client, :user_id, :notebook_ids, :auth_token
 
-  def initialize(evernote_client, user_id, notebook_ids)
+  def initialize(auth_token, evernote_client, user_id, notebook_ids)
+    @auth_token = auth_token
     @evernote_client = evernote_client
     @user_id = user_id
     @notebook_ids = notebook_ids
@@ -45,29 +46,8 @@ class EvernoteAccountSyncer
 
   def sync_notes
     evernote_client.note_guids.each do |note_guid|
-      note    = evernote_client.fetch_note(note_guid)
-      content = note.content.gsub( %r{</?[^>]+?>}, '' )
-      if !Note.exists?(note_guid)
-        Note.create!(
-          id: note_guid,
-          title: note.title,
-          content: content,
-          created_at: Time.at(note.created/1000),
-          updated_at: Time.at(note.updated/1000),
-          update_sequence_num: note.updateSequenceNum
-        )
-      end
-      create_taggings_for_note(note_guid, note.tagGuids)
+      #SyncNotesWorker.new.perform(auth_token, note_guid)
+      SyncNotesWorker.perform_async(auth_token, note_guid)
     end
-  end
-
-  def create_taggings_for_note(note_guid, tag_guids)
-    tag_guids.try(:each) do |tag_guid|
-      Tagging.create!(
-        note_id: note_guid,
-        tag_id: tag_guid
-      )
-    end
-  rescue ActiveRecord::RecordNotUnique
   end
 end

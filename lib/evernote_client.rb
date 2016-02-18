@@ -15,6 +15,7 @@ class EvernoteClient
   end
 
   def user
+    binding.pry
     user_store.getUser(auth_token)
   end
 
