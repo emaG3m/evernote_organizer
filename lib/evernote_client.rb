@@ -10,8 +10,14 @@ class EvernoteClient
       consumer_secret:OAUTH_CONSUMER_SECRET,
       sandbox: SANDBOX
     )
-    @user_store = client.user_store
-    @note_store = client.note_store
+  end
+
+  def user_store
+    @user_store ||= client.user_store
+  end
+
+  def note_store
+    @note_store ||= client.note_store
   end
 
   def user
@@ -35,8 +41,4 @@ class EvernoteClient
   def fetch_note(note_guid)
     note_store.getNote(auth_token, note_guid, true, false, false, false)
   end
-
-  private
-
-  attr_reader :user_store, :note_store
 end

@@ -10,11 +10,9 @@ require './models/notebook.rb'
 require './models/tag.rb'
 require './models/tagging.rb'
 require './models/user.rb'
+require './evernote_config.rb'
 
 enable :sessions
-
-$LOAD_PATH.push(File.expand_path(File.dirname(__FILE__)))
-require './evernote_config.rb'
 
 helpers do
   def auth_token
