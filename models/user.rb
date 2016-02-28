@@ -6,7 +6,9 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
 
   has_many :notebooks
+  has_many :notes, through: :notebook
   has_many :tags
+  has_many :taggings, through: :tags
 
   def self.authenticate(email, password)
     user = find_by_email!(email)

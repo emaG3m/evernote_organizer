@@ -43,3 +43,10 @@ p.error {
   color: #007299;
   box-shadow: none;
 }
+
+
+/*COMPARE TAG TO TAG PAGE*/
+ul.nav-pills {
+  height: 300px;
+  overflow: auto;
+}

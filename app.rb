@@ -22,6 +22,10 @@ helpers do
   def evernote_client
     @client ||= EvernoteClient.new(auth_token)
   end
+
+  def current_user
+    User.find(session[:user_id]) if session[:user_id]
+  end
 end
 
 # GET REQUESTS
@@ -59,6 +63,15 @@ get '/sync_account' do
     @notebooks[notebook.name.to_sym] = notebook.guid
   end
   erb :sync_account
+end
+
+get '/compare-tag-to-tag' do
+  @tags = Tag.joins(:taggings)
+    .where(user_id: session[:user_id])
+    .select('tags.id, tags.name, COUNT(taggings.note_id) as count')
+    .group('tags.id')
+    .order('count desc').to_a
+  erb :tag_to_tag_diagrams
 end
 
 # POST REQUESTS

@@ -1,0 +1,8 @@
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+<h2>Tags:</h2>
+<ul class="nav nav-pills">
+<% @tags.each do |tag| %>
+  <li><a href="#" id=<%=tag.id%>><%= tag.name %> (<%= tag.count%>)</a></li>
+<% end %>
+</ul>
