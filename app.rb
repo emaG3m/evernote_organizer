@@ -5,6 +5,7 @@ require 'pry'
 require './config/environments'
 require './lib/evernote_client.rb'
 require './lib/evernote_account_syncer.rb'
+require './lib/diagram_services/compare_tags_aggregator.rb'
 require './models/note.rb'
 require './models/notebook.rb'
 require './models/tag.rb'
@@ -44,6 +45,7 @@ get '/login' do
   when /unauthorized/
     @error = 'You attempted an action that requires authorization. Please log in first.'
   end
+
   erb :login
 end
 
@@ -62,6 +64,7 @@ get '/sync_account' do
   evernote_client.notebooks.each do |notebook|
     @notebooks[notebook.name.to_sym] = notebook.guid
   end
+
   erb :sync_account
 end
 
@@ -71,7 +74,13 @@ get '/compare-tag-to-tag' do
     .select('tags.id, tags.name, COUNT(taggings.note_id) as count')
     .group('tags.id')
     .order('count desc').to_a
+
   erb :tag_to_tag_diagrams
+end
+
+get '/api' do
+  content_type :json
+  DiagramServices::CompareTagsAggregator.new(Tag.where(name: "game of thrones").first).test_method.to_json
 end
 
 # POST REQUESTS
