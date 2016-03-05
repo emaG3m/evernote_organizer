@@ -1,17 +1,15 @@
 require 'bundler'
 require 'sinatra'
 require 'sinatra/activerecord'
-require 'pry'
 require './config/environments'
-require './lib/evernote_client.rb'
-require './lib/evernote_account_syncer.rb'
-require './lib/diagram_services/compare_tags_aggregator.rb'
-require './models/note.rb'
-require './models/notebook.rb'
-require './models/tag.rb'
-require './models/tagging.rb'
-require './models/user.rb'
-require './evernote_config.rb'
+require 'pry'
+
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+
+require 'evernote_config.rb'
+
+Dir[File.join(File.dirname(__FILE__), 'lib', '**', '*.rb')].each { |file| require file }
+Dir[File.join(File.dirname(__FILE__), 'models', '**', '*.rb')].each { |file| require file }
 
 enable :sessions
 
