@@ -8,3 +8,9 @@ gem 'evernote_oauth'
 gem 'pry-byebug'
 gem 'tux'
 gem 'bcrypt-ruby'
+
+group :test do
+  gem 'rspec'
+  gem 'factory_girl'
+  gem 'database_cleaner'
+end

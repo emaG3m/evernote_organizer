@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   has_many :taggings, through: :tags
 
   def self.authenticate(email, password)
-    user = find_by_email!(email)
+    user = find_by_email(email)
     (user && user.password == password) ? user : nil
   end
 

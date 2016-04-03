@@ -29,6 +29,7 @@ end
 
 # GET REQUESTS
 get '/' do
+  binding.pry
   erb :index
 end
 
@@ -83,16 +84,12 @@ end
 
 # POST REQUESTS
 post '/login' do
-  begin
-    user = User.authenticate(params[:email], params[:password])
-    if user
-      session[:user_id] = user.id
-      redirect '/'
-    else
-      redirect '/login?error=unmatching'
-    end
-  rescue ActiveRecord::RecordNotFound
-    redirect "/login?error=existence-#{params[:email]}"
+  user = User.authenticate(params[:email], params[:password])
+  if user
+    session[:user_id] = user.id
+    redirect '/'
+  else
+    redirect '/login?error=unmatching'
   end
 end
 
