@@ -5,3 +5,11 @@ development:
   username: ecwilliams
   password:
   host: localhost
+
+test:
+  adapter: postgresql
+  database: test
+  pool: 5
+  username: ecwilliams
+  password:
+  host: localhost

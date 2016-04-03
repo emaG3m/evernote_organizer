@@ -24,10 +24,14 @@ GEM
       columnize (= 0.9.0)
     coderay (1.1.0)
     columnize (0.9.0)
+    database_cleaner (1.5.1)
+    diff-lcs (1.2.5)
     evernote-thrift (1.25.1)
     evernote_oauth (0.2.3)
       evernote-thrift
       oauth (>= 0.4.1)
+    factory_girl (4.5.0)
+      activesupport (>= 3.0.0)
     i18n (0.7.0)
     json (1.8.3)
     method_source (0.8.2)
@@ -55,6 +59,19 @@ GEM
       rack (>= 1.0)
       rack-test (~> 0.6.2)
       ripl (>= 0.7.0)
+    rspec (3.4.0)
+      rspec-core (~> 3.4.0)
+      rspec-expectations (~> 3.4.0)
+      rspec-mocks (~> 3.4.0)
+    rspec-core (3.4.4)
+      rspec-support (~> 3.4.0)
+    rspec-expectations (3.4.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.4.0)
+    rspec-mocks (3.4.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.4.0)
+    rspec-support (3.4.1)
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -78,11 +95,17 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt-ruby
+  database_cleaner
   evernote_oauth
+  factory_girl
   oauth
   pg (= 0.18.3)
   pry-byebug
   rake
+  rspec
   sinatra
   sinatra-activerecord
   tux
+
+BUNDLED WITH
+   1.11.2
